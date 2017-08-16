@@ -35,81 +35,101 @@ function field_countdown_field_formatter_info() {
   return array(
     'field_countdown_default' => array(
       'label' => t('jQuery Countdown Timer without text timer'),
-      'field types' => array('field_countdown'),
+      'field types' => array('date', 'datetime', 'datestamp'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
     ),
     'field_countdown_with_text_timer' => array(
       'label' => t('jQuery Countdown Timer with text timer'),
-      'field types' => array('field_countdown'),
+      'field types' => array('date', 'datetime', 'datestamp'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
     ),
     'field_countdown_plain' => array(
       'label' => t('Date and time as string'),
-      'field types' => array('field_countdown'),
+      'field types' => array('date', 'datetime', 'datestamp'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
     ),
     'field_countdown_integer' => array(
       'label' => t('Unix time stamp'),
-      'field types' => array('field_countdown'),
+      'field types' => array('date', 'datetime', 'datestamp'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
     ),
   );
 }
 
 /**
+ * Converts the given datestring to a timestamp.
+ * $datetype corresponds with the date types provided by the Date module.
+ */
+function _to_timestamp($datestring, $datetype) {
+  if ($datetype === 'datetime') {
+    $date = DateTime::createFromFormat('Y-m-d H:i:s', $datestring);
+    $stamp = $date->getTimestamp();
+  } else if($datetype === 'date') {
+    $d = DateTime::createFromFormat('YYYY-MM-DDTHH:MM:SS', $datestring);
+    $stamp = $d->getTimestamp();
+  } else if($datetype === 'datestamp') {
+    $stamp = $datestring;
+  }
+
+  return $stamp;
+}
+
+/**
  * Implements hook_field_formatter_view().
  */
-/**
 function field_countdown_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
-  $countdown_field_count = &drupal_static(__FUNCTION__);
-  if (empty($countdown_field_count)) {
-    $countdown_field_count = 0;
-  }
+  $countdown_field_id = drupal_html_id("countdown-settings");
+  // @TODO: Make configureable
+  $fontsize = 18;
+  //dpm($items);
+
   switch ($display['type']) {
     case 'field_countdown_default':
       foreach ($items as $delta => $item) {
-        if (time() < $item['countdown_timer']) {
+        $endstamp = _to_timestamp($item['value'], $item['date_type']);
+
+        if (time() < $endstamp) {
           $element[$delta]['#markup'] = _field_countdown_display_timer(
-              check_plain($item['countdown_timer']), $instance['widget']['settings']['font_size'], $countdown_field_count, FALSE);
-          $countdown_field_count++;
+            check_plain($endstamp), $fontsize, $countdown_field_id, FALSE
+          );
         }
       }
       break;
 
     case 'field_countdown_with_text_timer':
       foreach ($items as $delta => $item) {
-        if (time() < $item['countdown_timer']) {
+        $endstamp = _to_timestamp($item['value'], $item['date_type']);
+
+        if (time() < $endstamp) {
           $element[$delta]['#markup'] = _field_countdown_display_timer(
-              check_plain($item['countdown_timer']), $instance['widget']['settings']['font_size'], $countdown_field_count, TRUE);
-          $countdown_field_count++;
+              check_plain($endstamp), $fontsize, $countdown_field_id, TRUE);
         }
       }
       break;
 
     case 'field_countdown_plain':
       foreach ($items as $delta => $item) {
-        $element[$delta]['#markup'] = date('Y-m-d H:i', check_plain(
-                $item['countdown_timer'])
-        );
+        $endstamp = _to_timestamp($item['value'], $item['date_type']);
+        $element[$delta]['#markup'] = date('Y-m-d H:i', check_plain($endstamp));
       }
       break;
 
     case 'field_countdown_integer':
       foreach ($items as $delta => $item) {
-        $element[$delta]['#markup'] = check_plain($item['countdown_timer']);
+        $endstamp = _to_timestamp($item['value'], $item['date_type']);
+        $element[$delta]['#markup'] = check_plain($endstamp);
       }
       break;
   }
 
   return $element;
 }
-**/
 
 /**
  * Creates the jquery countdown timer.
  */
-function _field_countdown_display_timer($time, $font_size, $countdown_field_count, $text_timer = FALSE) {
+function _field_countdown_display_timer($time, $font_size, $countdown_field_id, $text_timer = FALSE) {
   $path = libraries_get_path('jquery-countdown');
   drupal_add_js($path . '/assets/countdown/jquery.countdown.js', array(
     'type' => 'file', 'scope' => 'footer',
@@ -117,9 +137,9 @@ function _field_countdown_display_timer($time, $font_size, $countdown_field_coun
   );
   $suffix = str_replace(array('.', ' '), array('-', '-'), microtime());
   $settings = array(
-    'coundownSetting' . $countdown_field_count => array(
-      'coundownSetting_suffix' => $suffix,
-      'coundownSetting_time' => $time,
+    $countdown_field_id => array(
+      'countdown-settings-suffix' => $suffix,
+      'countdown-settings-time' => $time,
     ),
   );
   drupal_add_js(array('field_countdown' => $settings), 'setting');
