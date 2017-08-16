@@ -1,6 +1,6 @@
 name = Countdown Timer Field
-description = Defines countdown timer field types.
+description = Provides a formatter for Date fields displaying a Countdown.
 core = 7.x
 package = Fields
-dependencies[] = date_popup
+dependencies[] = date
 dependencies[] = libraries

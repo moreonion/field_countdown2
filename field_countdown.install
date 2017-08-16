@@ -6,22 +6,6 @@
  */
 
 /**
- * Implements hook_field_schema().
- */
-function field_countdown_field_schema($field) {
-  if ($field['type'] == 'field_countdown') {
-
-    $schema['columns']['countdown_timer'] = array(
-      'type' => 'int',
-      'length' => 16,
-      'not null' => FALSE,
-    );
-
-    return $schema;
-  }
-}
-
-/**
  * Implements hook_requirements().
  */
 function field_countdown_requirements($phase) {
