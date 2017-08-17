@@ -2,15 +2,14 @@
   Drupal.behaviors.field_countdown = {
     attach: function(context, settings) {
       var i = 0;
-      while (Drupal.settings.field_countdown["settings" + i])
-      {
-        var field_time = Drupal.settings.field_countdown["countdown-settings" + i]['countdown-settings-time'];
-        var field_suffix = Drupal.settings.field_countdown["countdown-settings" + i]['countdown-settings-suffix'];
-        var note = jQuery('#field-countdown-timer-note-' + field_suffix);
+      $.each( $('.countdown-timer', context), function( index, element ) {
+        var countdown = $('.countdown-timer-countdown', $(this));
+        var note = $('.countdown-timer-note', $(this));
+        var settings = Drupal.settings.field_countdown[countdown.attr('id')];
+        var field_time = settings['countdown-settings-time'];
+
         ts = new Date(field_time * 1000);
-        $('#field-countdown-timer-' + field_suffix).
-                not('.jquery-countdown-timer-processed')
-                .addClass('jquery-countdown-timer-processed').countdown({
+        countdown.countdown({
           timestamp: ts,
           callback: function(days, hours, minutes, seconds) {
             var date_time_str = new Array();
@@ -33,9 +32,7 @@
             note.html(message);
           }
         });
-
-        i++;
-      }
+      });
     }
   };
 })(jQuery);
