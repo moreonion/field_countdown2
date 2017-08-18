@@ -6,6 +6,28 @@
  */
 
 /**
+ * Implements hook_field_schema().
+ * Loads Date module install file and adds visibility column.
+ */
+function field_countdown_field_schema($field) {
+	if($field['type'] === 'field_countdown') {
+		$hack = $field;
+		$hack['type'] = 'datestamp';
+
+		module_load_install('date');
+		$schema = date_field_schema($hack);
+
+		$schema['columns']['visibility'] = array(
+			'type' => 'int',
+			'length' => 1,
+			'not null' => FALSE,
+		);
+
+		return $schema;
+	}
+}
+
+/**
  * Implements hook_requirements().
  */
 function field_countdown_requirements($phase) {
