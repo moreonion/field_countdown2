@@ -51,27 +51,6 @@ function field_countdown_field_load($entity_type, $entities, $field, $instances,
 	date_field_load($entity_type, $entities, $field, $instances, $langcode, $items, $age);
 }
 
-/* function field_countdown_field_widget_info() { */
-/* 	module_load_include('inc', 'date', 'date.field.inc'); */
-/* 	$info = date_field_widget_info(); */
-/* 	$info['date_text']['settings'] += array('visibility' => 1); */
-/* 	$info['date_text']['field types'] = array('field_countdown'); */
-/* 	$info['date_text']['behaviors']['multiple values'] = FIELD_BEHAVIOR_NONE; */
-
-/* 	$info['date_select']['settings'] += array('visibility' => 1); */
-/* 	$info['date_select']['field types'] = array('field_countdown'); */
-/* 	$info['date_select']['behaviors']['multiple values'] = FIELD_BEHAVIOR_NONE; */
-
-/* 	if(module_exists('date_popup')) { */
-/* 		$info['date_popup']['settings'] += array('visibility' => 1); */
-/* 		$info['date_popup']['field types'] = array('field_countdown'); */
-/* 		$info['date_popup']['behaviors']['multiple values'] = FIELD_BEHAVIOR_NONE; */
-/* 	} */
-/* 	dpm($info); */
-
-/* 	return $info; */
-/* } */
-
 /**
  * Implements hook_field_widget_info_alter().
  */
@@ -105,6 +84,9 @@ function date_field_widget_form_alter(&$element, &$form_state, $context) {
   }
 }
 
+/**
+ * Wrapper around date_apis date_type_format to inject our field type.
+ */
 function field_countdown_type_format($type) {
 	module_load_include('module', 'date_api', 'date_api');
 
@@ -314,7 +296,29 @@ function field_countdown_validate($element, &$form_state) {
  */
 function field_countdown_field_settings_form($field, $instance, $has_data) {
 	module_load_include('inc', 'date', 'date.field');
-	return date_field_settings_form($field, $instance, $has_data);
+	$form = date_field_settings_form($field, $instance, $has_data);
+
+  unset($form['tz_handling']);
+  unset($form['enddate_required']);
+  unset($form['enddate_get']);
+
+  // Fixate tz_handling to the timezone of the site.
+	$form['tz_handling'] = array(
+		'#type' => 'hidden',
+		'#default_value' => 'site'
+	);
+  // Disable setting of enddate
+  $form['enddate_get'] = array(
+    '#type' => 'hidden',
+    '#default_value' => 0,
+    '#value' => 0
+  );
+  $form['enddate_required'] = array(
+    '#type' => 'hidden',
+    '#default_value' => 0
+  );
+
+	return $form;
 }
 
 /**
@@ -413,28 +417,26 @@ function field_countdown_field_formatter_view($entity_type, $entity, $field, $in
 
   switch ($display['type']) {
     case 'field_countdown_default':
-      foreach ($items as $delta => $item) {
-				if($item['visibility'] === '1') {
-					$date = new DateObject($item['value'], new DateTimeZone('UTC'));
-					$endstamp = $date->getTimestamp();
+  foreach ($items as $delta => $item) {
+		if($item['visibility'] === '1') {
+			$endstamp = $item['value'];
 
-					$element[$delta]['#markup'] = _field_countdown_display_timer(
-						check_plain($endstamp), $font_size, $font_size_note, $countdown_field_id, FALSE
-					);
-				}
+			$element[$delta]['#markup'] = _field_countdown_display_timer(
+				check_plain($endstamp), $font_size, $font_size_note, $countdown_field_id, FALSE
+			);
+		}
       }
       break;
 
     case 'field_countdown_with_text_timer':
       foreach ($items as $delta => $item) {
-				if($item['visibility'] === '1') {
-					$date = new DateObject($item['value'], new DateTimeZone('UTC'));
-					$endstamp = $date->getTimestamp();
+			if($item['visibility'] === '1') {
+				$endstamp = $item['value'];
 
-					$element[$delta]['#markup'] = _field_countdown_display_timer(
-							check_plain($endstamp), $font_size, $font_size_note, $countdown_field_id, TRUE
-					);
-				}
+				$element[$delta]['#markup'] = _field_countdown_display_timer(
+						check_plain($endstamp), $font_size, $font_size_note, $countdown_field_id, TRUE
+				);
+			}
       }
       break;
   }
