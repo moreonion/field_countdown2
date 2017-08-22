@@ -141,7 +141,7 @@ function field_countdown_field_formatter_info() {
   return array(
     'field_countdown_default' => array(
       'label' => t('jQuery Countdown Timer without text timer'),
-      'field types' => array('date', 'datetime', 'datestamp'),
+      'field types' => array('field_countdown'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '48',
@@ -149,7 +149,7 @@ function field_countdown_field_formatter_info() {
     ),
     'field_countdown_with_text_timer' => array(
       'label' => t('jQuery Countdown Timer with text timer'),
-      'field types' => array('date', 'datetime', 'datestamp'),
+      'field types' => array('field_countdown'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '48',
