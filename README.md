@@ -1,6 +1,8 @@
 # Countdown Timer Field Module
 Original Author: Varun Mishra
+
 Email: varunmishra2006@gmail.com
+
 Original Module: https://www.drupal.org/project/field_countdown
 
 ## Description
