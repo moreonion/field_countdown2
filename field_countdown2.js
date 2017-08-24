@@ -1,11 +1,11 @@
 (function($) {
-  Drupal.behaviors.field_countdown = {
+  Drupal.behaviors.field_countdown2 = {
     attach: function(context, settings) {
       var i = 0;
       $.each( $('.countdown-timer', context), function( index, element ) {
         var countdown = $('.countdown-timer-countdown', $(this));
         var note = $('.countdown-timer-note', $(this));
-        var settings = Drupal.settings.field_countdown[countdown.attr('id')];
+        var settings = Drupal.settings.field_countdown2[countdown.attr('id')];
         var field_time = settings['countdown-settings-time'];
 
         ts = new Date(field_time * 1000);

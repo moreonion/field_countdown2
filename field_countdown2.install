@@ -2,15 +2,15 @@
 
 /**
  * @file
- * Countdown Timer Field install file.
+ * Countdown Timer Field #2 install file.
  */
 
 /**
  * Implements hook_field_schema().
  * Loads Date module install file and adds visibility column.
  */
-function field_countdown_field_schema($field) {
-	if($field['type'] === 'field_countdown') {
+function field_countdown2_field_schema($field) {
+	if($field['type'] === 'field_countdown2') {
 		$hack = $field;
 		$hack['type'] = 'datestamp';
 

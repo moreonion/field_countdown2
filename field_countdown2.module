@@ -10,7 +10,7 @@
 /**
  * Implements hook_field_info().
  */
-function field_countdown_field_info() {
+function field_countdown2_field_info() {
   $granularity = array('year', 'month', 'day', 'hour', 'minute');
   $settings = array(
     'settings' => array(
@@ -32,11 +32,11 @@ function field_countdown_field_info() {
   );
 
 	$return = array(
-		'field_countdown' => array(
+		'field_countdown2' => array(
 			'label' => t('Countdown Timer Field'),
 			'description' => t('Countdown Timer Field.'),
 			'default_widget' => 'date_widget',
-			'default_formatter' => 'field_countdown_default',
+			'default_formatter' => 'field_countdown2_default',
 		) + $settings
 	); 
 
@@ -46,7 +46,7 @@ function field_countdown_field_info() {
 /**
  * Implements hook_field_load().
  */
-function field_countdown_field_load($entity_type, $entities, $field, $instances, $langcode, &$items, $age) {
+function field_countdown2_field_load($entity_type, $entities, $field, $instances, $langcode, &$items, $age) {
 	module_load_include('inc', 'date', 'date.field');
 	date_field_load($entity_type, $entities, $field, $instances, $langcode, $items, $age);
 }
@@ -55,12 +55,12 @@ function field_countdown_field_load($entity_type, $entities, $field, $instances,
  * Implements hook_field_widget_info_alter().
  */
 function date_field_widget_info_alter(&$info) {
-	$info['date_text']['field types'][] = 'field_countdown';
+	$info['date_text']['field types'][] = 'field_countdown2';
 
-	$info['date_select']['field types'][] = 'field_countdown';
+	$info['date_select']['field types'][] = 'field_countdown2';
 
 	if(module_exists('date_popup')) {
-		$info['date_popup']['field types'][] = 'field_countdown';
+		$info['date_popup']['field types'][] = 'field_countdown2';
 	}
 }
 
@@ -73,33 +73,33 @@ function date_field_widget_form_alter(&$element, &$form_state, $context) {
   $items = $context['items'];
   $delta = $context['delta'];
 
-  if ($field['type'] === 'field_countdown') {
+  if ($field['type'] === 'field_countdown2') {
 		$default = isset($items[$delta]['visibility']) ? $items[$delta]['visibility'] : $field['settings']['visibility'];
 		$element['visibility'] = array(
 			'#type' => 'checkbox',
 			'#title' => t('Visible'),
 			'#default_value' => $default
 		);
-		$element['#element_validate'] = array('field_countdown_validate');
+		$element['#element_validate'] = array('field_countdown2_validate');
   }
 }
 
 /**
- * Validate and update a field_countdown element.
+ * Validate and update a field_countdown2 element.
  *
  * Don't try this if there were errors before reaching this point.
  */
-function field_countdown_validate($element, &$form_state) {
+function field_countdown2_validate($element, &$form_state) {
 	module_load_include('inc', 'date', 'date_elements');
 	$element['value']['#field']['type'] = 'datestamp';
 	date_combo_validate($element, $form_state);
-	$element['value']['#field']['type'] = 'field_countdown';
+	$element['value']['#field']['type'] = 'field_countdown2';
 }
 
 /**
  * Implements hook_field_settings_form().
  */
-function field_countdown_field_settings_form($field, $instance, $has_data) {
+function field_countdown2_field_settings_form($field, $instance, $has_data) {
 	module_load_include('inc', 'date', 'date.field');
 	$form = date_field_settings_form($field, $instance, $has_data);
 
@@ -129,7 +129,7 @@ function field_countdown_field_settings_form($field, $instance, $has_data) {
 /**
  * Implements hook_field_is_empty().
  */
-function field_countdown_field_is_empty($item, $field) {
+function field_countdown2_field_is_empty($item, $field) {
 	module_load_include('inc', 'date', 'date.field');
 	date_field_is_empty($item, $field);
 }
@@ -137,19 +137,19 @@ function field_countdown_field_is_empty($item, $field) {
 /**
  * Implements hook_field_formatter_info().
  */
-function field_countdown_field_formatter_info() {
+function field_countdown2_field_formatter_info() {
   return array(
-    'field_countdown_default' => array(
+    'field_countdown2_default' => array(
       'label' => t('jQuery Countdown Timer without text timer'),
-      'field types' => array('field_countdown'),
+      'field types' => array('field_countdown2'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '48',
         'font_size_note' => '22'),
     ),
-    'field_countdown_with_text_timer' => array(
+    'field_countdown2_with_text_timer' => array(
       'label' => t('jQuery Countdown Timer with text timer'),
-      'field types' => array('field_countdown'),
+      'field types' => array('field_countdown2'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '48',
@@ -161,14 +161,14 @@ function field_countdown_field_formatter_info() {
 /**
  * Implements hook_field_formatter_settings_form().
  */
-function field_countdown_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+function field_countdown2_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
   $element = array();
 
-  if($display['type'] === 'field_countdown_default' ||
-     $display['type'] === 'field_countdown_with_text_timer') {
+  if($display['type'] === 'field_countdown2_default' ||
+     $display['type'] === 'field_countdown2_with_text_timer') {
 
     $element['font_size'] = array(
       '#title' => t('Font size of countdown'),
@@ -195,14 +195,14 @@ function field_countdown_field_formatter_settings_form($field, $instance, $view_
 /**
  * Implements hook_field_formatter_settings_summary().
  */
-function field_countdown_field_formatter_settings_summary($field, $instance, $view_mode) {
+function field_countdown2_field_formatter_settings_summary($field, $instance, $view_mode) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
   $summary = '';
 
-  if($display['type'] === 'field_countdown_default' ||
-     $display['type'] === 'field_countdown_with_text_timer') {
+  if($display['type'] === 'field_countdown2_default' ||
+     $display['type'] === 'field_countdown2_with_text_timer') {
 
     $summary = t('Font size of countdown is @size px. Font size of text is @note px.',
      array('@size' => $settings['font_size'], '@note' => $settings['font_size_note']));
@@ -214,31 +214,31 @@ function field_countdown_field_formatter_settings_summary($field, $instance, $vi
 /**
  * Implements hook_field_formatter_view().
  */
-function field_countdown_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+function field_countdown2_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
   $countdown_field_id = drupal_html_id("countdown-timer-countdown");
   $font_size = $display['settings']['font_size'];
   $font_size_note = $display['settings']['font_size_note'];
 
   switch ($display['type']) {
-    case 'field_countdown_default':
+    case 'field_countdown2_default':
   foreach ($items as $delta => $item) {
 		if($item['visibility'] === '1') {
 			$endstamp = $item['value'];
 
-			$element[$delta]['#markup'] = _field_countdown_display_timer(
+			$element[$delta]['#markup'] = _field_countdown2_display_timer(
 				check_plain($endstamp), $font_size, $font_size_note, $countdown_field_id, FALSE
 			);
 		}
       }
       break;
 
-    case 'field_countdown_with_text_timer':
+    case 'field_countdown2_with_text_timer':
       foreach ($items as $delta => $item) {
 			if($item['visibility'] === '1') {
 				$endstamp = $item['value'];
 
-				$element[$delta]['#markup'] = _field_countdown_display_timer(
+				$element[$delta]['#markup'] = _field_countdown2_display_timer(
 						check_plain($endstamp), $font_size, $font_size_note, $countdown_field_id, TRUE
 				);
 			}
@@ -252,8 +252,8 @@ function field_countdown_field_formatter_view($entity_type, $entity, $field, $in
 /**
  * Creates the jquery countdown timer.
  */
-function _field_countdown_display_timer($time, $font_size, $font_size_note, $countdown_field_id, $text_timer = FALSE) {
-  $path = drupal_get_path('module', 'field_countdown');
+function _field_countdown2_display_timer($time, $font_size, $font_size_note, $countdown_field_id, $text_timer = FALSE) {
+  $path = drupal_get_path('module', 'field_countdown2');
   drupal_add_js($path . '/jquery_countdown/countdown/jquery.countdown.js', array(
     'type' => 'file', 'scope' => 'footer',
       )
@@ -264,8 +264,8 @@ function _field_countdown_display_timer($time, $font_size, $font_size_note, $cou
       'countdown-settings-time' => $time,
     ),
   );
-  drupal_add_js(array('field_countdown' => $settings), 'setting');
-  drupal_add_js(drupal_get_path('module', 'field_countdown') . '/field_countdown.js', array(
+  drupal_add_js(array('field_countdown2' => $settings), 'setting');
+  drupal_add_js(drupal_get_path('module', 'field_countdown2') . '/field_countdown2.js', array(
     'scope' => 'footer', 'weight' => 5,
   ));
 
@@ -278,7 +278,7 @@ function _field_countdown_display_timer($time, $font_size, $font_size_note, $cou
   );
 
   $content = theme(
-    'field_countdown_timer',
+    'field_countdown2_timer',
     array(
       'id' => $countdown_field_id,
       'text_timer' => $text_timer,
@@ -291,9 +291,9 @@ function _field_countdown_display_timer($time, $font_size, $font_size_note, $cou
 /**
  * Implements hook_theme().
  */
-function field_countdown_theme() {
+function field_countdown2_theme() {
   return array(
-    'field_countdown_timer' => array(
+    'field_countdown2_timer' => array(
       'variables' => array(),
     ),
   );
@@ -302,7 +302,7 @@ function field_countdown_theme() {
 /**
  * Returns HTML for the timer container.
  */
-function theme_field_countdown_timer($variables) {
+function theme_field_countdown2_timer($variables) {
   $note_id = drupal_html_id("countdown-timer-note");
 
   $output = "<div class='countdown-timer'>";
