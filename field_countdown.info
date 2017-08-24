@@ -4,4 +4,3 @@ core = 7.x
 package = Fields
 stylesheets[all][] = css/field_countdown.css
 dependencies[] = date
-dependencies[] = libraries

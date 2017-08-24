@@ -253,8 +253,8 @@ function field_countdown_field_formatter_view($entity_type, $entity, $field, $in
  * Creates the jquery countdown timer.
  */
 function _field_countdown_display_timer($time, $font_size, $font_size_note, $countdown_field_id, $text_timer = FALSE) {
-  $path = libraries_get_path('jquery-countdown');
-  drupal_add_js($path . '/assets/countdown/jquery.countdown.js', array(
+  $path = drupal_get_path('module', 'field_countdown');
+  drupal_add_js($path . '/jquery_countdown/countdown/jquery.countdown.js', array(
     'type' => 'file', 'scope' => 'footer',
       )
   );
@@ -269,7 +269,7 @@ function _field_countdown_display_timer($time, $font_size, $font_size_note, $cou
     'scope' => 'footer', 'weight' => 5,
   ));
 
-  drupal_add_css($path . '/assets/countdown/jquery.countdown.css');
+  drupal_add_css($path . '/jquery_countdown/countdown/jquery.countdown.css');
   drupal_add_css(
     '.countdownHolder {font-size: ' . $font_size . 'px}', 'inline'
   );
