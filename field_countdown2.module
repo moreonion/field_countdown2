@@ -103,25 +103,15 @@ function field_countdown2_field_settings_form($field, $instance, $has_data) {
 	module_load_include('inc', 'date', 'date.field');
 	$form = date_field_settings_form($field, $instance, $has_data);
 
-  unset($form['tz_handling']);
-  unset($form['enddate_required']);
-  unset($form['enddate_get']);
+	// Fixate tz_handling to the timezone of the site.
+	$form['tz_handling']['#default_value'] = 'site';
+	$form['tz_handling']['#access'] = FALSE;
 
-  // Fixate tz_handling to the timezone of the site.
-	$form['tz_handling'] = array(
-		'#type' => 'hidden',
-		'#default_value' => 'site'
-	);
-  // Disable setting of enddate
-  $form['enddate_get'] = array(
-    '#type' => 'hidden',
-    '#default_value' => 0,
-    '#value' => 0
-  );
-  $form['enddate_required'] = array(
-    '#type' => 'hidden',
-    '#default_value' => 0
-  );
+	// Disable setting of enddate
+	$form['enddate_get']['#default_value'] = 0;
+	$form['enddate_get']['#access'] = FALSE;
+	$form['enddate_required']['#default_value'] = 0;
+	$form['enddate_required']['#access'] = FALSE;
 
 	return $form;
 }
