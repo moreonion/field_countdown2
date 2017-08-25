@@ -1,3 +1,9 @@
+/**
+ * @file
+ * Behavior for field_countdown2.
+ * Initializes the jQuery Countdown Timer.
+ */
+
 (function($) {
   Drupal.behaviors.field_countdown2 = {
     attach: function(context, settings) {
