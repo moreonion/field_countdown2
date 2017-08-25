@@ -37,7 +37,6 @@ function field_countdown2_field_settings_form($field, $instance, $has_data) {
  * Implements hook_field_is_empty().
  */
 function field_countdown2_field_is_empty($item, $field) {
-  module_load_include('inc', 'date', 'date.field');
   date_field_is_empty($item, $field);
 }
 
@@ -101,7 +100,6 @@ function field_countdown2_field_formatter_settings_summary($field, $instance, $v
  */
 function field_countdown2_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
-  $countdown_field_id = drupal_html_id("countdown-timer-countdown");
   $font_size = $display['settings']['font_size'];
   $font_size_note = $display['settings']['font_size_note'];
 
@@ -112,8 +110,7 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
           $endstamp = $item['value'];
 
           $element[$delta]['#markup'] = field_countdown2_display_timer(
-            check_plain($endstamp), $font_size, $font_size_note,
-            $countdown_field_id, FALSE
+            check_plain($endstamp), $font_size, $font_size_note, FALSE
           );
         }
       }
@@ -125,8 +122,7 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
           $endstamp = $item['value'];
 
           $element[$delta]['#markup'] = field_countdown2_display_timer(
-            check_plain($endstamp), $font_size, $font_size_note,
-            $countdown_field_id, TRUE
+            check_plain($endstamp), $font_size, $font_size_note, TRUE
           );
         }
       }
