@@ -94,7 +94,8 @@ function date_field_widget_form_alter(&$element, &$form_state, $context)
  *
  * Don't try this if there were errors before reaching this point.
  */
-function field_countdown2_validate($element, &$form_state) {
+function field_countdown2_validate($element, &$form_state)
+{
     module_load_include('inc', 'date', 'date_elements');
     $element['value']['#field']['type'] = 'datestamp';
     date_combo_validate($element, $form_state);
@@ -143,7 +144,8 @@ function field_countdown2_field_formatter_info()
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '48',
-        'font_size_note' => '22'),
+        'font_size_note' => '22'
+      ),
     ),
     'field_countdown2_with_text_timer' => array(
       'label' => t('jQuery Countdown Timer with text timer'),
@@ -151,7 +153,8 @@ function field_countdown2_field_formatter_info()
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '48',
-        'font_size_note' => '22'),
+        'font_size_note' => '22'
+      ),
     ),
     );
 }
@@ -204,7 +207,6 @@ function field_countdown2_field_formatter_settings_summary($field, $instance, $v
     if ($display['type'] === 'field_countdown2_default'
         || $display['type'] === 'field_countdown2_with_text_timer'
     ) {
-
         $summary = t(
             'Font size of countdown is @size px. Font size of text is @note px.',
             array('@size' => $settings['font_size'], '@note' => $settings['font_size_note'])
