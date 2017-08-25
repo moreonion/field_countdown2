@@ -59,45 +59,51 @@ function field_countdown2_validate($element, &$form_state) {
 /**
  * Creates the jquery countdown timer.
  */
-function field_countdown2_display_timer($time, $font_size, $font_size_note, $text_timer = FALSE) {
+function field_countdown2_display_timer(&$element, $time, $font_size, $font_size_note, $text_timer = FALSE) {
   $countdown_field_id = drupal_html_id("countdown-timer-countdown");
   $note_id = drupal_html_id("countdown-timer-note");
-
-  $path = drupal_get_path('module', 'field_countdown2');
-  drupal_add_js(
-    $path . '/jquery_countdown/countdown/jquery.countdown.js',
-    array(
-      'type' => 'file',
-      'scope' => 'footer',
-    )
-  );
-  $suffix = str_replace(array('.', ' '), array('-', '-'), microtime());
   $settings = array(
     $countdown_field_id => array(
       'countdown-settings-time' => $time,
     ),
   );
-  drupal_add_js(array('field_countdown2' => $settings), 'setting');
-  drupal_add_js(
-    drupal_get_path('module', 'field_countdown2') . '/field_countdown2.js',
-    array(
-      'scope' => 'footer',
-      'weight' => 5,
-    )
-  );
 
-  drupal_add_css($path . '/jquery_countdown/countdown/jquery.countdown.css');
-  drupal_add_css(
-    '#' . $countdown_field_id . ' {font-size: ' . $font_size . 'px}', 'inline'
+  $path = drupal_get_path('module', 'field_countdown2');
+  $element['#attached']['js'][] = array(
+    'data' => $path . '/jquery_countdown/countdown/jquery.countdown.js',
+    'type' => 'file',
+    'scope' => 'footer',
   );
-  drupal_add_css(
-    '#' . $note_id . ' { font-size: ' . $font_size_note . 'px }', 'inline'
+  $element['#attached']['js'][] = array(
+    'data' => $path . '/field_countdown2.js',
+    'type' => 'file',
+    'scope' => 'footer',
+    'weight' => 5,
   );
+  $element['#attached']['js'][] = array(
+    'data' => array('field_countdown2' => $settings),
+    'type' => 'setting',
+  );
+  $element['#attached']['css'][] = array(
+    'data' => $path . '/jquery_countdown/countdown/jquery.countdown.css',
+    'type' => 'file',
+  );
+  $element['#attached']['css'][] = array(
+    'data' =>
+    '#' . $countdown_field_id . ' { font-size: ' . $font_size . 'px }',
+    'type' => 'inline',
+  );
+  $element['#attached']['css'][] = array(
+    'data' =>
+    '#' . $note_id . ' { font-size: ' . $font_size_note . 'px }',
+    'type' => 'inline',
+  );
+  $suffix = str_replace(array('.', ' '), array('-', '-'), microtime());
 
   $content = theme(
     'field_countdown2_timer',
     array(
-      'id' => $countdown_field_id,
+      'timer_id' => $countdown_field_id,
       'note_id' => $note_id,
       'text_timer' => $text_timer,
     )
@@ -112,22 +118,12 @@ function field_countdown2_display_timer($time, $font_size, $font_size_note, $tex
 function field_countdown2_theme() {
   return array(
     'field_countdown2_timer' => array(
-      'variables' => array(),
+      'template' => 'field-countdown2-timer',
+      'variables' => array(
+        'timer_id' => NULL,
+        'note_id' => NULL,
+        'text_timer' => NULL,
+      ),
     ),
   );
-}
-
-/**
- * Returns HTML for the timer container.
- */
-function theme_field_countdown2_timer($variables) {
-
-  $output = "<div class='countdown-timer'>";
-  $output .= "<div id='" . $variables['id'] . "' class='countdown-timer-countdown'></div>";
-  if ($variables['text_timer']) {
-    $output .= "<div id='" . $variables['note_id'] . "' class='countdown-timer-note'></div>";
-  }
-  $output .= "</div>";
-
-  return $output;
 }
