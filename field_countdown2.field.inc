@@ -4,6 +4,7 @@
  * @file
  * Field API functions based on the date module.
  */
+
 module_load_include('inc', 'date', 'date.field');
 
 /**
@@ -23,7 +24,7 @@ function field_countdown2_field_settings_form($field, $instance, $has_data) {
   $form['tz_handling']['#default_value'] = 'site';
   $form['tz_handling']['#access'] = FALSE;
 
-  // Disable setting of enddate
+  // Disable setting of enddate.
   $form['enddate_get']['#default_value'] = 0;
   $form['enddate_get']['#access'] = FALSE;
   $form['enddate_required']['#default_value'] = 0;
@@ -58,7 +59,7 @@ function field_countdown2_field_formatter_settings_form($field, $instance, $view
       '#default_value' => $settings['font_size'],
       '#element_validate' =>
         array('element_validate_integer_positive'),
-      '#required' => TRUE
+      '#required' => TRUE,
     );
 
     $element['font_size_note'] = array(
@@ -67,7 +68,7 @@ function field_countdown2_field_formatter_settings_form($field, $instance, $view
       '#default_value' => $settings['font_size_note'],
       '#element_validate' =>
         array('element_validate_integer_positive'),
-      '#required' => TRUE
+      '#required' => TRUE,
     );
   }
 
@@ -105,31 +106,31 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
   $font_size_note = $display['settings']['font_size_note'];
 
   switch ($display['type']) {
-  case 'field_countdown2_default':
-    foreach ($items as $delta => $item) {
-      if ($item['visibility'] === '1') {
-        $endstamp = $item['value'];
+    case 'field_countdown2_default':
+      foreach ($items as $delta => $item) {
+        if ($item['visibility'] === '1') {
+          $endstamp = $item['value'];
 
-        $element[$delta]['#markup'] = field_countdown2_display_timer(
-          check_plain($endstamp), $font_size, $font_size_note,
-          $countdown_field_id, FALSE
-        );
+          $element[$delta]['#markup'] = field_countdown2_display_timer(
+            check_plain($endstamp), $font_size, $font_size_note,
+            $countdown_field_id, FALSE
+          );
+        }
       }
-    }
-    break;
+      break;
 
-  case 'field_countdown2_with_text_timer':
-    foreach ($items as $delta => $item) {
-      if ($item['visibility'] === '1') {
-        $endstamp = $item['value'];
+    case 'field_countdown2_with_text_timer':
+      foreach ($items as $delta => $item) {
+        if ($item['visibility'] === '1') {
+          $endstamp = $item['value'];
 
-        $element[$delta]['#markup'] = field_countdown2_display_timer(
-          check_plain($endstamp), $font_size, $font_size_note,
-          $countdown_field_id, TRUE
-        );
+          $element[$delta]['#markup'] = field_countdown2_display_timer(
+            check_plain($endstamp), $font_size, $font_size_note,
+            $countdown_field_id, TRUE
+          );
+        }
       }
-    }
-    break;
+      break;
   }
 
   return $element;
@@ -146,7 +147,7 @@ function field_countdown2_field_formatter_info() {
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '48',
-        'font_size_note' => '22'
+        'font_size_note' => '22',
       ),
     ),
     'field_countdown2_with_text_timer' => array(
@@ -155,7 +156,7 @@ function field_countdown2_field_formatter_info() {
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '48',
-        'font_size_note' => '22'
+        'font_size_note' => '22',
       ),
     ),
   );
@@ -191,8 +192,8 @@ function field_countdown2_field_info() {
       'description' => t('Countdown Timer Field.'),
       'default_widget' => 'date_widget',
       'default_formatter' => 'field_countdown2_default',
-    ) + $settings
-  ); 
+    ) + $settings,
+  );
 
   return $return;
 }

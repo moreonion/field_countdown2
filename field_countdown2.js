@@ -1,14 +1,15 @@
 /**
  * @file
  * Behavior for field_countdown2.
+ *
  * Initializes the jQuery Countdown Timer.
  */
 
-(function($) {
+(function ($) {
   Drupal.behaviors.field_countdown2 = {
-    attach: function(context, settings) {
+    attach: function (context, settings) {
       var i = 0;
-      $.each( $('.countdown-timer', context), function( index, element ) {
+      $.each($('.countdown-timer', context), function (index, element) {
         var countdown = $('.countdown-timer-countdown', $(this));
         var note = $('.countdown-timer-note', $(this));
         var settings = Drupal.settings.field_countdown2[countdown.attr('id')];
@@ -17,7 +18,7 @@
         ts = new Date(field_time * 1000);
         countdown.countdown({
           timestamp: ts,
-          callback: function(days, hours, minutes, seconds) {
+          callback: function (days, hours, minutes, seconds) {
             var date_time_str = new Array();
             date_time_str['@days'] = Drupal.formatPlural(
                     days, '1 day', '@count days'

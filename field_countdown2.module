@@ -2,6 +2,8 @@
 
 /**
  * @file
+ * Contains alter hooks, validation and theme functions.
+ *
  * Countdown timer field module allows you to create countdown timer
  * field to count the days, hours, minutes, and seconds until a specified
  * event.
@@ -36,7 +38,7 @@ function date_field_widget_form_alter(&$element, &$form_state, $context) {
     $element['visibility'] = array(
       '#type' => 'checkbox',
       '#title' => t('Visible'),
-      '#default_value' => $default
+      '#default_value' => $default,
     );
     $element['#element_validate'] = array('field_countdown2_validate');
   }
@@ -47,8 +49,7 @@ function date_field_widget_form_alter(&$element, &$form_state, $context) {
  *
  * Don't try this if there were errors before reaching this point.
  */
-function field_countdown2_validate($element, &$form_state)
-{
+function field_countdown2_validate($element, &$form_state) {
   module_load_include('inc', 'date', 'date_elements');
   $element['value']['#field']['type'] = 'datestamp';
   date_combo_validate($element, $form_state);
@@ -59,55 +60,57 @@ function field_countdown2_validate($element, &$form_state)
  * Creates the jquery countdown timer.
  */
 function field_countdown2_display_timer($time, $font_size, $font_size_note, $countdown_field_id, $text_timer = FALSE) {
-    $path = drupal_get_path('module', 'field_countdown2');
-    drupal_add_js(
-      $path . '/jquery_countdown/countdown/jquery.countdown.js',
-      array(
-        'type' => 'file', 'scope' => 'footer',
-      )
-    );
-    $suffix = str_replace(array('.', ' '), array('-', '-'), microtime());
-    $settings = array(
-      $countdown_field_id => array(
-        'countdown-settings-time' => $time,
-      ),
-    );
-    drupal_add_js(array('field_countdown2' => $settings), 'setting');
-    drupal_add_js(
-      drupal_get_path('module', 'field_countdown2') . '/field_countdown2.js',
-      array(
-        'scope' => 'footer', 'weight' => 5,
-      )
-    );
+  $path = drupal_get_path('module', 'field_countdown2');
+  drupal_add_js(
+    $path . '/jquery_countdown/countdown/jquery.countdown.js',
+    array(
+      'type' => 'file',
+      'scope' => 'footer',
+    )
+  );
+  $suffix = str_replace(array('.', ' '), array('-', '-'), microtime());
+  $settings = array(
+    $countdown_field_id => array(
+      'countdown-settings-time' => $time,
+    ),
+  );
+  drupal_add_js(array('field_countdown2' => $settings), 'setting');
+  drupal_add_js(
+    drupal_get_path('module', 'field_countdown2') . '/field_countdown2.js',
+    array(
+      'scope' => 'footer',
+      'weight' => 5,
+    )
+  );
 
-    drupal_add_css($path . '/jquery_countdown/countdown/jquery.countdown.css');
-    drupal_add_css(
-      '.countdownHolder {font-size: ' . $font_size . 'px}', 'inline'
-    );
-    drupal_add_css(
-      '.countdown-timer-note { font-size: ' . $font_size_note . 'px }', 'inline'
-    );
+  drupal_add_css($path . '/jquery_countdown/countdown/jquery.countdown.css');
+  drupal_add_css(
+    '.countdownHolder {font-size: ' . $font_size . 'px}', 'inline'
+  );
+  drupal_add_css(
+    '.countdown-timer-note { font-size: ' . $font_size_note . 'px }', 'inline'
+  );
 
-    $content = theme(
-      'field_countdown2_timer',
-      array(
-        'id' => $countdown_field_id,
-        'text_timer' => $text_timer,
-      )
-    );
+  $content = theme(
+    'field_countdown2_timer',
+    array(
+      'id' => $countdown_field_id,
+      'text_timer' => $text_timer,
+    )
+  );
 
-    return $content;
+  return $content;
 }
 
 /**
  * Implements hook_theme().
  */
 function field_countdown2_theme() {
-    return array(
-      'field_countdown2_timer' => array(
-        'variables' => array(),
-      ),
-    );
+  return array(
+    'field_countdown2_timer' => array(
+      'variables' => array(),
+    ),
+  );
 }
 
 /**
