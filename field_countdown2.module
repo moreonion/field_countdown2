@@ -59,7 +59,10 @@ function field_countdown2_validate($element, &$form_state) {
 /**
  * Creates the jquery countdown timer.
  */
-function field_countdown2_display_timer(&$element, $time, $font_size, $font_size_note, $text_timer = FALSE) {
+function field_countdown2_display_timer($time, $font_size, $font_size_note, $text_timer = FALSE) {
+  $element = array(
+    '#attached' => array(),
+  );
   $countdown_field_id = drupal_html_id("countdown-timer-countdown");
   $note_id = drupal_html_id("countdown-timer-note");
   $settings = array(
@@ -98,18 +101,13 @@ function field_countdown2_display_timer(&$element, $time, $font_size, $font_size
     '#' . $note_id . ' { font-size: ' . $font_size_note . 'px }',
     'type' => 'inline',
   );
-  $suffix = str_replace(array('.', ' '), array('-', '-'), microtime());
 
-  $content = theme(
-    'field_countdown2_timer',
-    array(
-      'timer_id' => $countdown_field_id,
-      'note_id' => $note_id,
-      'text_timer' => $text_timer,
-    )
-  );
+  $element['#theme'] = 'field_countdown2_timer';
+  $element['#timer_id'] = $countdown_field_id;
+  $element['#note_id'] = $note_id;
+  $element['#text_timer'] = $text_timer;
 
-  return $content;
+  return $element;
 }
 
 /**

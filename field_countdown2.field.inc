@@ -109,8 +109,7 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
         if ($item['visibility'] === '1') {
           $endstamp = $item['value'];
 
-          $element[$delta]['#markup'] = field_countdown2_display_timer(
-            $element,
+          $element[$delta] = field_countdown2_display_timer(
             check_plain($endstamp),
             $font_size,
             $font_size_note,
@@ -125,8 +124,11 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
         if ($item['visibility'] === '1') {
           $endstamp = $item['value'];
 
-          $element[$delta]['#markup'] = field_countdown2_display_timer(
-            check_plain($endstamp), $font_size, $font_size_note, TRUE
+          $element[$delta] = field_countdown2_display_timer(
+            check_plain($endstamp),
+            $font_size,
+            $font_size_note,
+            TRUE
           );
         }
       }
