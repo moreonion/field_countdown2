@@ -6,6 +6,7 @@
  */
 
 module_load_include('inc', 'date', 'date.field');
+module_load_include('inc', 'date', 'date_elements');
 
 /**
  * Implements hook_field_load().
@@ -31,6 +32,60 @@ function field_countdown2_field_settings_form($field, $instance, $has_data) {
   $form['enddate_required']['#access'] = FALSE;
 
   return $form;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for field_ui_field_edit_form().
+ */
+function field_countdown2_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
+  if($form['#field']['type'] === 'field_countdown2') {
+    module_load_include('module', 'date', 'date');
+    $form['#field']['type'] = 'datestamp';
+    date_form_field_ui_field_edit_form_alter($form, $form_state, $form_id);
+    $form['#field']['type'] = 'field_countdown2';
+  }
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function field_countdown2_field_widget_form(&$form, &$form_state, &$field, $instance, $langcode, $items, $delta, $element) {
+  $field['type'] = 'datestamp';
+  $element = date_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $base);
+  $field['type'] = 'field_countdown2';
+
+  $default = isset($items[$delta]['visibility']) ?
+    $items[$delta]['visibility'] : $field['settings']['visibility'];
+  $element['visibility'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Visible'),
+    '#default_value' => $default,
+  );
+
+  $element['#element_validate'] = array('field_countdown2_validate');
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function field_countdown2_field_widget_info() {
+  $info = date_field_widget_info();
+
+  $info['date_text']['field types'] = array('field_countdown2');
+  $info['field_countdown2_date_text'] = $info['date_text'];
+  unset($info['date_text']);
+
+  $info['date_select']['field types'] = array('field_countdown2');
+  $info['field_countdown2_date_select'] = $info['date_select'];
+  unset($info['date_select']);
+
+  if (module_exists('date_popup')) {
+    $info['date_popup']['field types'] = array('field_countdown2');
+    $info['field_countdown2_date_popup'] = $info['date_popup'];
+    unset($info['date_popup']);
+  }
+
+  return $info;
 }
 
 /**
@@ -175,7 +230,7 @@ function field_countdown2_field_info() {
       'granularity' => drupal_map_assoc($granularity),
       'tz_handling' => 'site',
       'timezone_db' => 'UTC',
-      'visibility' => 1,
+      'visibility' => 0,
     ),
     'instance_settings' => array(
       'default_value' => 'now',
@@ -192,8 +247,9 @@ function field_countdown2_field_info() {
     'field_countdown2' => array(
       'label' => t('Countdown Timer Field'),
       'description' => t('Countdown Timer Field.'),
-      'default_widget' => 'date_widget',
+      'default_widget' => 'field_countdown2_widget',
       'default_formatter' => 'field_countdown2_default',
+      'default_token_formatter' => 'date_plain',
     ) + $settings,
   );
 

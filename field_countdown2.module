@@ -14,35 +14,35 @@ module_load_include('inc', 'field_countdown2', 'field_countdown2.field');
 /**
  * Implements hook_field_widget_info_alter().
  */
-function date_field_widget_info_alter(&$info) {
-  $info['date_text']['field types'][] = 'field_countdown2';
-  $info['date_select']['field types'][] = 'field_countdown2';
+/* function date_field_widget_info_alter(&$info) { */
+/*   $info['date_text']['field types'][] = 'field_countdown2'; */
+/*   $info['date_select']['field types'][] = 'field_countdown2'; */
 
-  if (module_exists('date_popup')) {
-    $info['date_popup']['field types'][] = 'field_countdown2';
-  }
-}
+/*   if (module_exists('date_popup')) { */
+/*     $info['date_popup']['field types'][] = 'field_countdown2'; */
+/*   } */
+/* } */
 
 /**
  * Implements hook_field_widget_form_alter().
  */
-function date_field_widget_form_alter(&$element, &$form_state, $context) {
-  $field = $context['field'];
-  $instance = $context['instance'];
-  $items = $context['items'];
-  $delta = $context['delta'];
+/* function date_field_widget_form_alter(&$element, &$form_state, $context) { */
+/*   $field = $context['field']; */
+/*   $instance = $context['instance']; */
+/*   $items = $context['items']; */
+/*   $delta = $context['delta']; */
 
-  if ($field['type'] === 'field_countdown2') {
-    $default = isset($items[$delta]['visibility']) ?
-      $items[$delta]['visibility'] : $field['settings']['visibility'];
-    $element['visibility'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Visible'),
-      '#default_value' => $default,
-    );
-    $element['#element_validate'] = array('field_countdown2_validate');
-  }
-}
+/*   if ($field['type'] === 'field_countdown2') { */
+/*     $default = isset($items[$delta]['visibility']) ? */
+/*       $items[$delta]['visibility'] : $field['settings']['visibility']; */
+/*     $element['visibility'] = array( */
+/*       '#type' => 'checkbox', */
+/*       '#title' => t('Visible'), */
+/*       '#default_value' => $default, */
+/*     ); */
+/*     $element['#element_validate'] = array('field_countdown2_validate'); */
+/*   } */
+/* } */
 
 /**
  * Validate and update a field_countdown2 element.
