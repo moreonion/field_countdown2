@@ -15,6 +15,10 @@ function field_countdown2_field_load($entity_type, $entities, $field, $instances
   date_field_load($entity_type, $entities, $field, $instances, $langcode, $items, $age);
 }
 
+function field_countdown2_field_widget_settings_form($field, $instance) {
+  module_load_include('inc', 'date', 'date_admin');
+  return _date_field_widget_settings_form($field, $instance);
+}
 /**
  * Implements hook_field_settings_form().
  */
