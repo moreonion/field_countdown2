@@ -2,6 +2,6 @@ name = Countdown Timer Field
 description = Provides a formatter for Date fields displaying a Countdown.
 core = 7.x
 package = Fields
-stylesheets[all][] = css/field_countdown.css
+stylesheets[all][] = css/field_countdown2.css
 dependencies[] = date
 dependencies[] = libraries
