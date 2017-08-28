@@ -7,6 +7,7 @@
 
 module_load_include('inc', 'date', 'date.field');
 module_load_include('inc', 'date', 'date_elements');
+module_load_include('module', 'date', 'date');
 
 /**
  * Implements hook_field_load().
@@ -19,6 +20,7 @@ function field_countdown2_field_widget_settings_form($field, $instance) {
   module_load_include('inc', 'date', 'date_admin');
   return _date_field_widget_settings_form($field, $instance);
 }
+
 /**
  * Implements hook_field_settings_form().
  */
@@ -39,11 +41,21 @@ function field_countdown2_field_settings_form($field, $instance, $has_data) {
 }
 
 /**
+ * Implements hook_field_instance_settings_form().
+ *
+ * Wrapper functions for date administration, included only when processing
+ * field settings.
+ */
+function field_countdown2_field_instance_settings_form($field, $instance) {
+  module_load_include('inc', 'date', 'date_admin');
+  return _date_field_instance_settings_form($field, $instance);
+}
+
+/**
  * Implements hook_form_FORM_ID_alter() for field_ui_field_edit_form().
  */
 function field_countdown2_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
   if($form['#field']['type'] === 'field_countdown2') {
-    module_load_include('module', 'date', 'date');
     $form['#field']['type'] = 'datestamp';
     date_form_field_ui_field_edit_form_alter($form, $form_state, $form_id);
     $form['#field']['type'] = 'field_countdown2';
@@ -55,7 +67,7 @@ function field_countdown2_form_field_ui_field_edit_form_alter(&$form, &$form_sta
  */
 function field_countdown2_field_widget_form(&$form, &$form_state, &$field, $instance, $langcode, $items, $delta, $element) {
   $field['type'] = 'datestamp';
-  $element = date_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $base);
+  $element = date_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $element);
   $field['type'] = 'field_countdown2';
 
   $default = isset($items[$delta]['visibility']) ?
@@ -67,6 +79,24 @@ function field_countdown2_field_widget_form(&$form, &$form_state, &$field, $inst
   );
 
   $element['#element_validate'] = array('field_countdown2_validate');
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_properties_alter().
+ *
+ * Alters the widget properties of a field instance before it gets displayed.
+ * Used here to flag new entities so we can later tell if they need default values.
+ */
+function field_countdown2_field_widget_properties_alter(&$widget, $context) {
+  if(in_array($widget['type'], array('field_countdown2_date_select',
+    'field_countdown2_date_popup',
+    'field_countdown2_date_text'))) {
+    $orig_type = $widget['type'];
+    $widget['type'] = substr($widget['type'], 17);
+    date_field_widget_properties_alter($widget, $context);
+    $widget['type'] = $orig_type;
+  }
 }
 
 /**
@@ -252,6 +282,7 @@ function field_countdown2_field_info() {
       'label' => t('Countdown Timer Field'),
       'description' => t('Countdown Timer Field.'),
       'default_widget' => 'field_countdown2_widget',
+      /* 'default_widget' => 'date_widget', */
       'default_formatter' => 'field_countdown2_default',
       'default_token_formatter' => 'date_plain',
     ) + $settings,

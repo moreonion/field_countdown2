@@ -45,6 +45,17 @@ module_load_include('inc', 'field_countdown2', 'field_countdown2.field');
 /* } */
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function field_countdown2_element_info_alter(&$type) {
+  $type['date_combo']['#process'] = 'field_countdown2_combo_element_process';
+}
+
+function field_countdown2_combo_element_process($element, &$form_state, $form) {
+  die();
+}
+
+/**
  * Validate and update a field_countdown2 element.
  *
  * Don't try this if there were errors before reaching this point.
