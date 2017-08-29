@@ -1,44 +1,30 @@
-/* css for timepicker */
-@media only screen and (max-width: 550px) {
-  .countdown-timer-countdown {
-    font-size: 150% !important;
+.flip-clock-wrapper {
+  font-size: 1em;
+  margin: 0 !important;
+}
+@media screen and (max-width: 500px) {
+  .flip-clock-wrapper ul {
+    height: 33.75px !important;
+    width: 22.5px !important;
   }
-}
-.countdownHolder {
-  width: auto !important;
-}
-.countdown-timer-note {
-  text-align: center;
-  margin-bottom: 1em;
-}
-.ui-timepicker-div .ui-widget-header {
-  margin-bottom: 8px;
-}
-.ui-timepicker-div dl {
-  text-align: left;
-}
-.ui-timepicker-div dl dt {
-  height: 25px;
-  margin-bottom: -25px;
-}
-.ui-timepicker-div dl dd {
-  margin: 0 10px 10px 65px;
-}
-.ui-timepicker-div td {
-  font-size: 90%;
-}
-.ui-tpicker-grid-label {
-  background: none;
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-.ui-timepicker-rtl {
-  direction: rtl;
-}
-.ui-timepicker-rtl dl {
-  text-align: right;
-}
-.ui-timepicker-rtl dl dd {
-  margin: 0 65px 10px 10px;
+  .flip-clock-divider {
+    height: 33.75px !important;
+    width: 10px !important;
+  }
+  .flip-clock-dot {
+    width: 5px !important;
+    height: 5px !important;
+    left: 2.5px !important;
+  }
+  .flip-clock-dot.bottom {
+    bottom: 15px !important;
+  }
+  .flip-clock-wrapper ul li a div {
+    font-size: 22.5px !important;
+  }
+  .flip-clock-wrapper ul li {
+    line-height: 32.6px !important;
+  }
+  .flip-clock-divider .flip-clock-label {
+    right: -3.5em !important;
 }
