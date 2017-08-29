@@ -16,6 +16,9 @@ function field_countdown2_field_load($entity_type, $entities, $field, $instances
   date_field_load($entity_type, $entities, $field, $instances, $langcode, $items, $age);
 }
 
+/**
+ * Implements hook_field_widget_settings_form().
+ */
 function field_countdown2_field_widget_settings_form($field, $instance) {
   module_load_include('inc', 'date', 'date_admin');
   return _date_field_widget_settings_form($field, $instance);
@@ -55,7 +58,7 @@ function field_countdown2_field_instance_settings_form($field, $instance) {
  * Implements hook_form_FORM_ID_alter() for field_ui_field_edit_form().
  */
 function field_countdown2_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
-  if($form['#field']['type'] === 'field_countdown2') {
+  if ($form['#field']['type'] === 'field_countdown2') {
     $form['#field']['type'] = 'datestamp';
     date_form_field_ui_field_edit_form_alter($form, $form_state, $form_id);
     $form['#field']['type'] = 'field_countdown2';
@@ -78,7 +81,11 @@ function field_countdown2_field_widget_form(&$form, &$form_state, &$field, $inst
     '#default_value' => $default,
   );
 
+  // Strip field_countdown2_ from the widget_type to get a valid
+  // date module widget type.
+  $element['#widget_type'] = substr($element['#widget_type'], 17);
   $element['#element_validate'] = array('field_countdown2_validate');
+
   return $element;
 }
 
@@ -86,12 +93,14 @@ function field_countdown2_field_widget_form(&$form, &$form_state, &$field, $inst
  * Implements hook_field_widget_properties_alter().
  *
  * Alters the widget properties of a field instance before it gets displayed.
- * Used here to flag new entities so we can later tell if they need default values.
+ * Used here to flag new entities so we can later tell if they need default
+ * values.
  */
 function field_countdown2_field_widget_properties_alter(&$widget, $context) {
-  if(in_array($widget['type'], array('field_countdown2_date_select',
+  if (in_array($widget['type'], array('field_countdown2_date_select',
     'field_countdown2_date_popup',
-    'field_countdown2_date_text'))) {
+    'field_countdown2_date_text',
+  ))) {
     $orig_type = $widget['type'];
     $widget['type'] = substr($widget['type'], 17);
     date_field_widget_properties_alter($widget, $context);
