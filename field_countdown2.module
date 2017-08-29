@@ -40,7 +40,7 @@ function field_countdown2_display_timer($time, $font_size, $font_size_note, $tex
 
   $path = drupal_get_path('module', 'field_countdown2');
   $element['#attached']['js'][] = array(
-    'data' => $path . '/jquery_countdown/countdown/jquery.countdown.js',
+    'data' => $path . '/flip_clock/flipclock.min.js',
     'type' => 'file',
     'scope' => 'footer',
   );
@@ -55,18 +55,12 @@ function field_countdown2_display_timer($time, $font_size, $font_size_note, $tex
     'type' => 'setting',
   );
   $element['#attached']['css'][] = array(
-    'data' => $path . '/jquery_countdown/countdown/jquery.countdown.css',
+    'data' => $path . '/flip_clock/flipclock.css',
     'type' => 'file',
   );
   $element['#attached']['css'][] = array(
-    'data' =>
-    '#' . $countdown_field_id . ' { font-size: ' . $font_size . 'em }',
-    'type' => 'inline',
-  );
-  $element['#attached']['css'][] = array(
-    'data' =>
-    '#' . $note_id . ' { font-size: ' . $font_size_note . 'em }',
-    'type' => 'inline',
+    'data' => $path . '/css/field_countdown2.css',
+    'type' => 'file',
   );
 
   $element['#theme'] = 'field_countdown2_timer';
