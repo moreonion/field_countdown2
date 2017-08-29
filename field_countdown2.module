@@ -60,12 +60,12 @@ function field_countdown2_display_timer($time, $font_size, $font_size_note, $tex
   );
   $element['#attached']['css'][] = array(
     'data' =>
-    '#' . $countdown_field_id . ' { font-size: ' . $font_size . 'px }',
+    '#' . $countdown_field_id . ' { font-size: ' . $font_size . 'em }',
     'type' => 'inline',
   );
   $element['#attached']['css'][] = array(
     'data' =>
-    '#' . $note_id . ' { font-size: ' . $font_size_note . 'px }',
+    '#' . $note_id . ' { font-size: ' . $font_size_note . 'em }',
     'type' => 'inline',
   );
 

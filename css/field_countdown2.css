@@ -1,9 +1,15 @@
 /* css for timepicker */
+@media only screen and (max-width: 550px) {
+  .countdown-timer-countdown {
+    font-size: 150% !important;
+  }
+}
 .countdownHolder {
   width: auto !important;
 }
 .countdown-timer-note {
   text-align: center;
+  margin-bottom: 1em;
 }
 .ui-timepicker-div .ui-widget-header {
   margin-bottom: 8px;

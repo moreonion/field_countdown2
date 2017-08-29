@@ -185,7 +185,7 @@ function field_countdown2_field_formatter_settings_summary($field, $instance, $v
     || $display['type'] === 'field_countdown2_with_text_timer'
   ) {
     $summary = t(
-      'Font size of countdown is @size px. Font size of text is @note px.',
+      'Font size of countdown is @size em. Font size of text is @note em.',
       array('@size' => $settings['font_size'], '@note' => $settings['font_size_note'])
     );
   }
@@ -246,8 +246,8 @@ function field_countdown2_field_formatter_info() {
       'field types' => array('field_countdown2'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
-        'font_size' => '48',
-        'font_size_note' => '22',
+        'font_size' => '4',
+        'font_size_note' => '1',
       ),
     ),
     'field_countdown2_with_text_timer' => array(
@@ -255,8 +255,8 @@ function field_countdown2_field_formatter_info() {
       'field types' => array('field_countdown2'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
-        'font_size' => '48',
-        'font_size_note' => '22',
+        'font_size' => '4',
+        'font_size_note' => '1',
       ),
     ),
   );
@@ -291,7 +291,6 @@ function field_countdown2_field_info() {
       'label' => t('Countdown Timer Field'),
       'description' => t('Countdown Timer Field.'),
       'default_widget' => 'field_countdown2_widget',
-      /* 'default_widget' => 'date_widget', */
       'default_formatter' => 'field_countdown2_default',
       'default_token_formatter' => 'date_plain',
     ) + $settings,
