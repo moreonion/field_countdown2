@@ -209,6 +209,7 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
 
           $element[$delta] = field_countdown2_display_timer(
             check_plain($endstamp),
+            $entity->language,
             $font_size,
             $font_size_note,
             FALSE

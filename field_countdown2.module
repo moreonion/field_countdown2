@@ -26,7 +26,7 @@ function field_countdown2_validate($element, &$form_state) {
 /**
  * Creates the jquery countdown timer.
  */
-function field_countdown2_display_timer($time, $font_size, $font_size_note, $text_timer = FALSE) {
+function field_countdown2_display_timer($time, $language, $font_size, $font_size_note, $text_timer = FALSE) {
   $element = array(
     '#attached' => array(),
   );
@@ -35,12 +35,13 @@ function field_countdown2_display_timer($time, $font_size, $font_size_note, $tex
   $settings = array(
     $countdown_field_id => array(
       'countdown-settings-time' => $time,
+      'countdown-settings-language' => $language,
     ),
   );
 
   $path = drupal_get_path('module', 'field_countdown2');
   $element['#attached']['js'][] = array(
-    'data' => $path . '/flip_clock/flipclock.min.js',
+    'data' => $path . '/flip_clock/flipclock.js',
     'type' => 'file',
     'scope' => 'footer',
   );
@@ -82,6 +83,7 @@ function field_countdown2_theme() {
         'timer_id' => NULL,
         'note_id' => NULL,
         'text_timer' => NULL,
+        'language' => NULL,
       ),
     ),
   );
