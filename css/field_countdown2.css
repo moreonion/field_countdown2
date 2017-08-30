@@ -51,7 +51,7 @@
     right: -4em;
   }
 }
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 338px) {
   .flip-clock-wrapper ul {
     height: .5em;
     width: .275em;
