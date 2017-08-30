@@ -78,15 +78,27 @@ function field_countdown2_field_widget_form(&$form, &$form_state, &$field, $inst
   $default_heading = isset($items[$delta]['heading']) ?
     $items[$delta]['heading'] : $field['settings']['heading'];
 
+  // We have to hack a div around our elements because
+  // the date_popup module forces the date-padding class
+  // on child elements, meaning the date elements will
+  // be indented by 10px.
   $element['visibility'] = array(
     '#type' => 'checkbox',
     '#title' => t('Visible'),
     '#default_value' => $default_visibility,
+    '#prefix' => '<div class="form-margin">',
+    '#suffix' => '</div>',
   );
 
   $element['heading'] = array(
     '#type' => 'textfield',
     '#title' => t('Heading'),
+    '#maxlength' => 90,
+    '#attributes' => array(
+      'placeholder' => t('Countdown Heading'),
+    ),
+    '#prefix' => '<div class="form-margin">',
+    '#suffix' => '</div>',
     '#default_value' => $default_heading,
   );
 
