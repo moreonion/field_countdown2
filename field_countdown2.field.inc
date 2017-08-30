@@ -73,12 +73,21 @@ function field_countdown2_field_widget_form(&$form, &$form_state, &$field, $inst
   $element = date_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $element);
   $field['type'] = 'field_countdown2';
 
-  $default = isset($items[$delta]['visibility']) ?
+  $default_visibility = isset($items[$delta]['visibility']) ?
     $items[$delta]['visibility'] : $field['settings']['visibility'];
+  $default_heading = isset($items[$delta]['heading']) ?
+    $items[$delta]['heading'] : $field['settings']['heading'];
+
   $element['visibility'] = array(
     '#type' => 'checkbox',
     '#title' => t('Visible'),
-    '#default_value' => $default,
+    '#default_value' => $default_visibility,
+  );
+
+  $element['heading'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Heading'),
+    '#default_value' => $default_heading,
   );
 
   // Strip field_countdown2_ from the widget_type to get a valid
@@ -149,10 +158,8 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
     case 'field_countdown2_default':
       foreach ($items as $delta => $item) {
         if ($item['visibility'] === '1') {
-          $endstamp = $item['value'];
-
           $element[$delta] = field_countdown2_display_timer(
-            check_plain($endstamp),
+            $item,
             $entity->language,
             $font_size,
             FALSE
@@ -193,6 +200,7 @@ function field_countdown2_field_info() {
       'tz_handling' => 'site',
       'timezone_db' => 'UTC',
       'visibility' => 0,
+      'heading' => NULL,
     ),
     'instance_settings' => array(
       'default_value' => 'now',
