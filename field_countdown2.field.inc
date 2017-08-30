@@ -144,7 +144,6 @@ function field_countdown2_field_is_empty($item, $field) {
 function field_countdown2_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
   $font_size = $display['settings']['font_size'];
-  $font_size_note = $display['settings']['font_size_note'];
 
   switch ($display['type']) {
     case 'field_countdown2_default':
@@ -156,23 +155,7 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
             check_plain($endstamp),
             $entity->language,
             $font_size,
-            $font_size_note,
             FALSE
-          );
-        }
-      }
-      break;
-
-    case 'field_countdown2_with_text_timer':
-      foreach ($items as $delta => $item) {
-        if ($item['visibility'] === '1') {
-          $endstamp = $item['value'];
-
-          $element[$delta] = field_countdown2_display_timer(
-            check_plain($endstamp),
-            $font_size,
-            $font_size_note,
-            TRUE
           );
         }
       }
@@ -188,21 +171,11 @@ function field_countdown2_field_formatter_view($entity_type, $entity, $field, $i
 function field_countdown2_field_formatter_info() {
   return array(
     'field_countdown2_default' => array(
-      'label' => t('jQuery Countdown Timer without text timer'),
+      'label' => t('jQuery Countdown Timer'),
       'field types' => array('field_countdown2'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'settings' => array(
         'font_size' => '4',
-        'font_size_note' => '1',
-      ),
-    ),
-    'field_countdown2_with_text_timer' => array(
-      'label' => t('jQuery Countdown Timer with text timer'),
-      'field types' => array('field_countdown2'),
-      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
-      'settings' => array(
-        'font_size' => '4',
-        'font_size_note' => '1',
       ),
     ),
   );
