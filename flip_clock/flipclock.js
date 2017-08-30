@@ -174,7 +174,8 @@ var FlipClock;
 			digit = 0;
 		}
 
-		return new FlipClock.Factory(obj, digit, options);
+		var clock = new FlipClock.Factory(obj, digit, options);
+    return clock;
 	};
 
 	/**
