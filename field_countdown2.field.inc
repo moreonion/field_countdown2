@@ -139,61 +139,6 @@ function field_countdown2_field_is_empty($item, $field) {
 }
 
 /**
- * Implements hook_field_formatter_settings_form().
- */
-function field_countdown2_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
-  $display = $instance['display'][$view_mode];
-  $settings = $display['settings'];
-
-  $element = array();
-
-  if ($display['type'] === 'field_countdown2_default'
-      || $display['type'] === 'field_countdown2_with_text_timer'
-  ) {
-    $element['font_size'] = array(
-      '#title' => t('Font size of countdown'),
-      '#type' => 'textfield',
-      '#default_value' => $settings['font_size'],
-      '#element_validate' =>
-        array('element_validate_integer_positive'),
-      '#required' => TRUE,
-    );
-
-    $element['font_size_note'] = array(
-      '#title' => t('Font size of text'),
-      '#type' => 'textfield',
-      '#default_value' => $settings['font_size_note'],
-      '#element_validate' =>
-        array('element_validate_integer_positive'),
-      '#required' => TRUE,
-    );
-  }
-
-  return $element;
-}
-
-/**
- * Implements hook_field_formatter_settings_summary().
- */
-function field_countdown2_field_formatter_settings_summary($field, $instance, $view_mode) {
-  $display = $instance['display'][$view_mode];
-  $settings = $display['settings'];
-
-  $summary = '';
-
-  if ($display['type'] === 'field_countdown2_default'
-    || $display['type'] === 'field_countdown2_with_text_timer'
-  ) {
-    $summary = t(
-      'Font size of countdown is @size em. Font size of text is @note em.',
-      array('@size' => $settings['font_size'], '@note' => $settings['font_size_note'])
-    );
-  }
-
-  return $summary;
-}
-
-/**
  * Implements hook_field_formatter_view().
  */
 function field_countdown2_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
