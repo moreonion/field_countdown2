@@ -1,6 +1,9 @@
 .flip-clock-wrapper {
   font-size: 1em;
-  margin: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 @media screen and (max-width: 815px) {
   .flip-clock-wrapper ul {
