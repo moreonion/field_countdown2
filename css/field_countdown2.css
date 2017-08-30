@@ -21,6 +21,11 @@
   margin-bottom: 2em;
 }
 
+.flip-clock-wrapper ul {
+  /* Determines the overall size of the timer. */
+  font-size: 60px;
+}
+
 @media screen and (max-width: 815px) {
   .flip-clock-wrapper ul {
     height: .5em;
