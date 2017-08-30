@@ -23,6 +23,11 @@ function field_countdown2_field_schema($field) {
       'length' => 1,
       'not null' => FALSE,
     );
+    $schema['columns']['heading'] = array(
+      'type' => 'text',
+      'length' => 90,
+      'not null' => FALSE,
+    );
 
     return $schema;
   }
