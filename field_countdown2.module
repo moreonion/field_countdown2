@@ -12,6 +12,27 @@
 module_load_include('inc', 'field_countdown2', 'field_countdown2.field');
 
 /**
+ * Implements hook_libraries_info().
+ */
+function field_countdown2_libraries_info() {
+  $libraries['FlipClock'] = [
+    'name' => 'FlipClock',
+    'vendor url' => 'http://flipclockjs.com/',
+    'download url' => 'https://github.com/objectivehtml/FlipClock/releases',
+    'version arguments' => [
+      'file' => 'package.json',
+      'pattern' => '"(\d+\.\d+\.\d+)"',
+      'lines' => 5,
+    ],
+    'files' => [
+      'css' => ['compiled/flipclock.css' => []],
+      'js' => ['compiled/flipclock.min.js' => []]
+    ],
+  ];
+  return $libraries;
+}
+
+/**
  * Validate and update a field_countdown2 element.
  *
  * Don't try this if there were errors before reaching this point.
@@ -34,9 +55,6 @@ function field_countdown2_validate($element, &$form_state) {
  * Creates the jquery countdown timer.
  */
 function field_countdown2_display_timer($item, $language, $font_size) {
-  $element = array(
-    '#attached' => array(),
-  );
   $countdown_field_id = drupal_html_id("countdown-timer-countdown");
   $settings = array(
     $countdown_field_id => array(
@@ -46,11 +64,7 @@ function field_countdown2_display_timer($item, $language, $font_size) {
   );
 
   $path = drupal_get_path('module', 'field_countdown2');
-  $element['#attached']['js'][] = array(
-    'data' => $path . '/flip_clock/flipclock.js',
-    'type' => 'file',
-    'scope' => 'footer',
-  );
+  $element['#attached']['libraries_load'][] = ['FlipClock'];
   $element['#attached']['js'][] = array(
     'data' => $path . '/field_countdown2.js',
     'type' => 'file',
@@ -60,10 +74,6 @@ function field_countdown2_display_timer($item, $language, $font_size) {
   $element['#attached']['js'][] = array(
     'data' => array('field_countdown2' => $settings),
     'type' => 'setting',
-  );
-  $element['#attached']['css'][] = array(
-    'data' => $path . '/flip_clock/flipclock.css',
-    'type' => 'file',
   );
   $element['#attached']['css'][] = array(
     'data' => $path . '/css/field_countdown2.css',
