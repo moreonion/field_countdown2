@@ -17,6 +17,13 @@ module_load_include('inc', 'field_countdown2', 'field_countdown2.field');
  * Don't try this if there were errors before reaching this point.
  */
 function field_countdown2_validate($element, &$form_state) {
+  if ($element['visibility']['#value'] === 1 &&
+     (trim($element['value']['date']['#value']) == '' ||
+      trim($element['value']['time']['#value']) == '')
+  ) {
+    form_error($element['value'], t('You need to enter a date if the countdown timer is set to visible.'));
+  }
+
   module_load_include('inc', 'date', 'date_elements');
   $element['value']['#field']['type'] = 'datestamp';
   date_combo_validate($element, $form_state);
