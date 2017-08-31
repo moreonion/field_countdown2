@@ -6,7 +6,5 @@ stylesheets[all][] = css/field_countdown2.css
 dependencies[] = date
 dependencies[] = text
 dependencies[] = features
-explanation = Field type(s) in use - see <a href="/admin/reports/fields">Field list</a>
 features[features_api][] = api:2
 features[field_base][] = field_countdown
-required = 1
